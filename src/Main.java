@@ -2,9 +2,14 @@ import java.io.File;
 
 public class Main {
     public static void main(String[] args) {
-        String folderPath = "D:/The Bat!";
+        String folderPath = "D:/Telegram";
         File file = new File(folderPath);
+
+        long start = System.currentTimeMillis();
         System.out.println(getFolderSize(file));
+
+        long duration = System.currentTimeMillis() - start;
+        System.out.println(duration + " ms");
     }
 
     public static long getFolderSize(File folder){
