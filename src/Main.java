@@ -1,5 +1,6 @@
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.concurrent.ForkJoinPool;
 
@@ -29,7 +30,9 @@ public class Main {
         System.out.println(GB + " GB");
         System.out.println(TB + " TB");
 
-        System.out.println(getHumanReadableSize(size));
+//        System.out.println(getHumanReadableSize(size));
+
+        System.out.println(getSizeFromHumanReadable("555 TB"));
     }
 
     public static long getFolderSize(File folder) {
@@ -69,8 +72,33 @@ public class Main {
 
     //TODO: 24B, 234Kb, 36Mb, 34Gb, 42Tb
     //TODO: 24B, 234K, 36M, 34G, 42T
-    public static long getSizeFromHumanReadable(String size) {
-        return 0L;
+    public static long getSizeFromHumanReadable(String stringSize) {
+        String[] symbol;
+        String delimeter = " ";
+        symbol = stringSize.split(delimeter);
+        BigDecimal intSize = new BigDecimal(String.valueOf((symbol[0])));
+        System.out.println("chislo " + symbol[0] + "  znachenie  " + symbol[1]);
+        switch (symbol[1]) {
+            case "B":
+                break;
+            case "KB":
+                intSize = intSize.multiply(KB);
+                break;
+            case "MB":
+                intSize = intSize.multiply(MB);
+                break;
+            case "GB":
+                intSize = intSize.multiply(GB);
+                break;
+            case "TB":
+                intSize = intSize.multiply(TB);
+                break;
+            default:
+                System.out.println("Вы не ввели размер файла");
+                break;
+        }
+
+        return intSize.longValue();
     }
 
 }
