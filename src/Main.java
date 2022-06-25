@@ -30,8 +30,7 @@ public class Main {
         System.out.println(GB + " GB");
         System.out.println(TB + " TB");
 
-//        System.out.println(getHumanReadableSize(size));
-
+        System.out.println(getHumanReadableSize(size));
         System.out.println(getSizeFromHumanReadable("555 TB"));
     }
 
@@ -97,7 +96,6 @@ public class Main {
                 System.out.println("Вы не ввели размер файла");
                 break;
         }
-
         return intSize.longValue();
     }
 
