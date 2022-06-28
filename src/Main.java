@@ -34,7 +34,7 @@ public class Main {
         System.out.println(getSizeFromHumanReadable("555G"));
 
     }
-    
+
 
     //TODO: 24B, 234Kb, 36Mb, 34Gb, 42Tb
     public static String getHumanReadableSize(long size) {
@@ -57,21 +57,6 @@ public class Main {
         }
         return number.toString();
 
-//        Map<String, Integer> sizeValues = new HashMap<>();
-//        String[] multipliers = {"B", "KB", "MB", "GB", "TB"};
-//        for (int i = 0; i < multipliers.length; i++) {
-//            sizeValues.put(multipliers[i], (int) Math.pow(1024, i));
-//        }
-//
-//        for (Map.Entry<String, Integer> entry : sizeValues.entrySet()) {
-//            Integer temp = entry.getValue();
-//            if (size < temp) {
-//
-//            }
-//        }
-//
-//
-//        return "";
     }
 
     //TODO: 24B, 234K, 36M, 34G, 42T
