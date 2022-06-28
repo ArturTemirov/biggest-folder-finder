@@ -14,6 +14,8 @@ public class Main {
     private static final BigDecimal GB = BigDecimal.valueOf(Math.pow(KB.longValue(), 3));
     private static final BigDecimal TB = BigDecimal.valueOf(Math.pow(KB.longValue(), 4));
 
+    private static final String[] SIZE_MULTIPLIERS = {"B", "K", "M", "G", "T"};
+
     public static void main(String[] args) {
 
         String folderPath = "D:/The BAT!";
@@ -38,25 +40,18 @@ public class Main {
 
     //TODO: 24B, 234Kb, 36Mb, 34Gb, 42Tb
     public static String getHumanReadableSize(long size) {
-        StringBuilder number = new StringBuilder();
-        BigDecimal finalSize;
-        if (size < KB.longValue()) {
-            number.append(size).append(" B");
-        } else if (size < MB.longValue()) {
-            finalSize = BigDecimal.valueOf(size).divide(KB, 3, RoundingMode.CEILING);
-            number.append(finalSize).append(" KB");
-        } else if (size < GB.longValue()) {
-            finalSize = BigDecimal.valueOf(size).divide(MB, 3, RoundingMode.CEILING);
-            number.append(finalSize).append(" MB");
-        } else if (size < TB.longValue()) {
-            finalSize = BigDecimal.valueOf(size).divide(GB, 3, RoundingMode.CEILING);
-            number.append(finalSize).append(" GB");
-        } else {
-            finalSize = BigDecimal.valueOf(size).divide(TB, 3, RoundingMode.CEILING);
-            number.append(finalSize).append(" TB");
+        BigDecimal value;
+        for (int i = 0; i < SIZE_MULTIPLIERS.length; i++) {
+            value = BigDecimal.valueOf(size).divide(BigDecimal
+                    .valueOf(Math.pow(1024, i)), 3, RoundingMode.CEILING);
+            if (value.compareTo(BigDecimal.valueOf(1024)) != 1) {
+                return value + ""
+                        + SIZE_MULTIPLIERS[i]
+                        + (i > 0 ? "B" : "");
+            }
         }
-        return number.toString();
 
+        return "Very big!";
     }
 
     //TODO: 24B, 234K, 36M, 34G, 42T
@@ -64,10 +59,10 @@ public class Main {
         String pattern = "([0-9]+)([^0-9]+)";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(stringSize);
-        String[] multipliers = {"B", "K", "M", "G", "T"};
+
         Map<String, Integer> sizeTypes = new HashMap<>();
-        for (int i = 0; i < multipliers.length; i++) {
-            sizeTypes.put(multipliers[i], (int) Math.pow(1024, i));
+        for (int i = 0; i < SIZE_MULTIPLIERS.length; i++) {
+            sizeTypes.put(SIZE_MULTIPLIERS[i], (int) Math.pow(1024, i));
         }
         if (m.find()) {
             return Long.parseLong(m.group(1)) * sizeTypes.get(m.group(2));
