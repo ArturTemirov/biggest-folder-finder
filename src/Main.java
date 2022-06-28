@@ -1,15 +1,12 @@
 import java.io.File;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+
 
 public class Main {
     private static final BigDecimal KB = new BigDecimal(1024);
@@ -32,29 +29,12 @@ public class Main {
         long duration = System.currentTimeMillis() - start;
         System.out.println(duration + " ms");
 
-        System.out.println(KB + " KB");
-        System.out.println(MB + " MB");
-        System.out.println(GB + " GB");
-        System.out.println(TB + " TB");
 
         System.out.println(getHumanReadableSize(size));
-        System.out.println(getSizeFromHumanReadable("555T"));
-        
-    }
+        System.out.println(getSizeFromHumanReadable("555G"));
 
-
-    public static long getFolderSize(File folder) {
-        if (folder.isFile()) {
-            return folder.length();
-        }
-        long sum = 0;
-        File[] files = folder.listFiles();
-        assert files != null;
-        for (File file : files) {
-            sum += getFolderSize(file);
-        }
-        return sum;
     }
+    
 
     //TODO: 24B, 234Kb, 36Mb, 34Gb, 42Tb
     public static String getHumanReadableSize(long size) {
@@ -77,7 +57,6 @@ public class Main {
         }
         return number.toString();
 
-
 //        Map<String, Integer> sizeValues = new HashMap<>();
 //        String[] multipliers = {"B", "KB", "MB", "GB", "TB"};
 //        for (int i = 0; i < multipliers.length; i++) {
@@ -98,16 +77,13 @@ public class Main {
     //TODO: 24B, 234K, 36M, 34G, 42T
     public static long getSizeFromHumanReadable(String stringSize) {
         String pattern = "([0-9]+)([^0-9]+)";
-
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(stringSize);
-
         String[] multipliers = {"B", "K", "M", "G", "T"};
         Map<String, Integer> sizeTypes = new HashMap<>();
         for (int i = 0; i < multipliers.length; i++) {
             sizeTypes.put(multipliers[i], (int) Math.pow(1024, i));
         }
-
         if (m.find()) {
             return Long.parseLong(m.group(1)) * sizeTypes.get(m.group(2));
         } else return 0L;
