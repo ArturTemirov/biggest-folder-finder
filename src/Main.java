@@ -2,7 +2,14 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Main {
     private static final BigDecimal KB = new BigDecimal(1024);
@@ -31,8 +38,10 @@ public class Main {
         System.out.println(TB + " TB");
 
         System.out.println(getHumanReadableSize(size));
-        System.out.println(getSizeFromHumanReadable("555 TB"));
+        System.out.println(getSizeFromHumanReadable("555T"));
+        
     }
+
 
     public static long getFolderSize(File folder) {
         if (folder.isFile()) {
@@ -67,36 +76,41 @@ public class Main {
             number.append(finalSize).append(" TB");
         }
         return number.toString();
+
+
+//        Map<String, Integer> sizeValues = new HashMap<>();
+//        String[] multipliers = {"B", "KB", "MB", "GB", "TB"};
+//        for (int i = 0; i < multipliers.length; i++) {
+//            sizeValues.put(multipliers[i], (int) Math.pow(1024, i));
+//        }
+//
+//        for (Map.Entry<String, Integer> entry : sizeValues.entrySet()) {
+//            Integer temp = entry.getValue();
+//            if (size < temp) {
+//
+//            }
+//        }
+//
+//
+//        return "";
     }
 
-    //TODO: 24B, 234Kb, 36Mb, 34Gb, 42Tb
     //TODO: 24B, 234K, 36M, 34G, 42T
     public static long getSizeFromHumanReadable(String stringSize) {
-        String[] symbol;
-        String delimeter = " ";
-        symbol = stringSize.split(delimeter);
-        BigDecimal intSize = new BigDecimal(String.valueOf((symbol[0])));
-        System.out.println("chislo " + symbol[0] + "  znachenie  " + symbol[1]);
-        switch (symbol[1]) {
-            case "B":
-                break;
-            case "KB":
-                intSize = intSize.multiply(KB);
-                break;
-            case "MB":
-                intSize = intSize.multiply(MB);
-                break;
-            case "GB":
-                intSize = intSize.multiply(GB);
-                break;
-            case "TB":
-                intSize = intSize.multiply(TB);
-                break;
-            default:
-                System.out.println("Вы не ввели размер файла");
-                break;
+        String pattern = "([0-9]+)([^0-9]+)";
+
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(stringSize);
+
+        String[] multipliers = {"B", "K", "M", "G", "T"};
+        Map<String, Integer> sizeTypes = new HashMap<>();
+        for (int i = 0; i < multipliers.length; i++) {
+            sizeTypes.put(multipliers[i], (int) Math.pow(1024, i));
         }
-        return intSize.longValue();
+
+        if (m.find()) {
+            return Long.parseLong(m.group(1)) * sizeTypes.get(m.group(2));
+        } else return 0L;
     }
 
 }
